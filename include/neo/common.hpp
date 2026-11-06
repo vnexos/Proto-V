@@ -8,6 +8,8 @@
 #include <bit>
 #include <cstddef>
 #include <cstdint>
+#include <span>
+#include <string_view>
 
 namespace neo {
 
@@ -76,5 +78,51 @@ inline constexpr uint16_t USX_AFLAG_REG_COUNT  = 0x0002;
         return v;
     }
 }
+
+/**
+ * @brief Computes the IEEE 802.3 32-bit Cyclic Redundancy Check (CRC32).
+ *
+ * Uses generator polynomial 0xEDB88320 (reflected) with initial value 0xFFFFFFFF
+ * and final inversion. Provides standard verification for binary headers.
+ *
+ * @param data Span of const bytes to checksum.
+ * @return 32-bit CRC32 checksum (0 for empty data).
+ */
+[[nodiscard]] uint32_t calcCRC32(std::span<const uint8_t> data) noexcept;
+
+/**
+ * @brief Overload of calcCRC32 for string views.
+ * @param str String view to checksum.
+ * @return 32-bit CRC32 checksum.
+ */
+[[nodiscard]] inline uint32_t calcCRC32(std::string_view str) noexcept {
+    return calcCRC32(std::span<const uint8_t>(
+        reinterpret_cast<const uint8_t*>(str.data()), str.size()));
+}
+
+/**
+ * @brief Computes 32-bit FNV-1a hash of a string view.
+ *
+ * Follows 32-bit FNV-1a algorithm with prime 0x01000193 and offset basis 0x811c9dc5.
+ * Characters are explicitly cast to uint8_t prior to XOR operations
+ * to prevent signed char sign-extension.
+ *
+ * @param str String view to hash.
+ * @return 32-bit FNV-1a hash value.
+ */
+[[nodiscard]] constexpr uint32_t fnv1a_32(std::string_view str) noexcept {
+    uint32_t hash = 0x811c9dc5u;
+    for (char c : str) {
+        hash = (hash ^ static_cast<uint8_t>(c)) * 0x01000193u;
+    }
+    return hash;
+}
+
+/**
+ * @brief Computes 32-bit FNV-1a hash over a byte span.
+ * @param bytes Span of const bytes to hash.
+ * @return 32-bit FNV-1a hash value.
+ */
+[[nodiscard]] uint32_t fnv1a_32(std::span<const uint8_t> bytes) noexcept;
 
 } // namespace neo
