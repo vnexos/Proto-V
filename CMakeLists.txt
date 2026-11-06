@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(ProtoV_NeoASM VERSION 1.0.0 LANGUAGES CXX)
+project(ProtoV VERSION 1.0.0 LANGUAGES CXX)
 
 # Enforce C++20 standard
 set(CMAKE_CXX_STANDARD 20)
