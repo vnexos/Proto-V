@@ -9,4 +9,4 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 enable_testing()
 
 # Subsystems
-add_subdirectory(neoasm)
+add_subdirectory(neo-asm)
