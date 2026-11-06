@@ -18,19 +18,19 @@
     "comments": {
       "patterns": [
         {
-          "name": "comment.line.semicolon.neoa",
+          "name": "comment.line.semicolon.assembly.neoa",
           "match": ";.*$"
         },
         {
-          "name": "comment.line.double-slash.neoa",
+          "name": "comment.line.double-slash.assembly.neoa",
           "match": "//.*$"
         },
         {
-          "name": "comment.line.number-sign.neoa",
+          "name": "comment.line.number-sign.assembly.neoa",
           "match": "#.*$"
         },
         {
-          "name": "comment.block.neoa",
+          "name": "comment.block.assembly.neoa",
           "begin": "/\\*",
           "end": "\\*/"
         }
@@ -39,23 +39,23 @@
     "strings": {
       "patterns": [
         {
-          "name": "string.quoted.double.neoa",
+          "name": "string.quoted.double.assembly.neoa",
           "begin": "\"",
           "end": "\"",
           "patterns": [
             {
-              "name": "constant.character.escape.neoa",
+              "name": "constant.character.escape.assembly.neoa",
               "match": "\\\\."
             }
           ]
         },
         {
-          "name": "string.quoted.single.neoa",
+          "name": "string.quoted.single.assembly.neoa",
           "begin": "'",
           "end": "'",
           "patterns": [
             {
-              "name": "constant.character.escape.neoa",
+              "name": "constant.character.escape.assembly.neoa",
               "match": "\\\\."
             }
           ]
@@ -65,14 +65,14 @@
     "labels": {
       "patterns": [
         {
-          "name": "entity.name.function.label.neoa",
+          "name": "entity.name.function.label.assembly.neoa",
           "match": "^[ \\t]*([a-zA-Z_.$][a-zA-Z0-9_.$]*):",
           "captures": {
-            "1": { "name": "entity.name.function.label.neoa" }
+            "1": { "name": "entity.name.function.label.assembly.neoa" }
           }
         },
         {
-          "name": "variable.other.pic-label.neoa",
+          "name": "entity.name.tag.label.pic.assembly.neoa",
           "match": "@[a-zA-Z0-9_.]+"
         }
       ]
@@ -80,7 +80,7 @@
     "directives": {
       "patterns": [
         {
-          "name": "keyword.control.directive.neoa",
+          "name": "keyword.control.directive.assembly.neoa",
           "match": "\\.(arch|text|data|bss|rodata|section|global|globl|extern|align|ascii|asciz|byte|word|dword|qword|space)\\b"
         }
       ]
@@ -90,16 +90,16 @@
         {
           "begin": "\\b(origin)\\s*(\\()",
           "beginCaptures": {
-            "1": { "name": "keyword.control.origin.neoa" },
-            "2": { "name": "punctuation.definition.parameters.begin.neoa" }
+            "1": { "name": "support.function.builtin.origin.assembly.neoa" },
+            "2": { "name": "punctuation.definition.parameters.begin.assembly.neoa" }
           },
           "end": "\\)",
           "endCaptures": {
-            "0": { "name": "punctuation.definition.parameters.end.neoa" }
+            "0": { "name": "punctuation.definition.parameters.end.assembly.neoa" }
           },
           "patterns": [
             {
-              "name": "entity.name.command.native.neoa",
+              "name": "entity.name.command.native.assembly.neoa",
               "match": "[^)]+"
             }
           ]
@@ -109,31 +109,31 @@
     "mnemonics": {
       "patterns": [
         {
-          "name": "keyword.operator.assignment.neoa",
+          "name": "keyword.control.mnemonic.assign.assembly.neoa",
           "match": "(?i)\\bASN\\b"
         },
         {
-          "name": "keyword.mnemonic.stack.neoa",
+          "name": "keyword.control.mnemonic.stack.assembly.neoa",
           "match": "(?i)\\b(PUSH|POP)\\b"
         },
         {
-          "name": "keyword.mnemonic.arithmetic.neoa",
+          "name": "keyword.control.mnemonic.arithmetic.assembly.neoa",
           "match": "(?i)\\b(ADD|SUB|MUL|DIV|MOD|NEG|UDIV|UMOD|ADD32|SUB32|MUL32|DIV32|MOD32|UDIV32|UMOD32)\\b"
         },
         {
-          "name": "keyword.mnemonic.bitwise.neoa",
+          "name": "keyword.control.mnemonic.bitwise.assembly.neoa",
           "match": "(?i)\\b(AND|OR|XOR|NOT|SHL|SHR|SAR|CLZ|AND32|OR32|XOR32|NOT32|SHL32|SHR32|SAR32|CLZ32)\\b"
         },
         {
-          "name": "keyword.control.branch.neoa",
+          "name": "keyword.control.mnemonic.branch.assembly.neoa",
           "match": "(?i)\\b(JMP|JEQ|JNE|JGT|JGE|JLT|JLE|JUGT|JUGE|JULT|JULE|CALL|RET)\\b"
         },
         {
-          "name": "keyword.mnemonic.system.neoa",
+          "name": "keyword.control.mnemonic.system.assembly.neoa",
           "match": "(?i)\\b(SYS|BRK|NOP|FENCE)\\b"
         },
         {
-          "name": "keyword.mnemonic.vector.neoa",
+          "name": "keyword.control.mnemonic.vector.assembly.neoa",
           "match": "(?i)\\b(VASN|VADD|VSUB|VMUL|VDIV|VAND|VOR|VXOR|VADD_I32|VSUB_I32|VMUL_I32|VADD_I64|VSUB_I64|VLOAD|VSTORE)\\b"
         }
       ]
@@ -141,23 +141,23 @@
     "registers": {
       "patterns": [
         {
-          "name": "variable.language.register.virtual.neoa",
+          "name": "variable.language.register.virtual.assembly.neoa",
           "match": "(?i)\\br([0-9]|[12][0-9]|3[01])\\b"
         },
         {
-          "name": "variable.language.register.system.neoa",
+          "name": "storage.type.register.system.assembly.neoa",
           "match": "(?i)\\b(sp|fp|zr)\\b"
         },
         {
-          "name": "variable.language.register.native.x86.neoa",
+          "name": "variable.language.register.native.x86.assembly.neoa",
           "match": "(?i)\\b(rax|rbx|rcx|rdx|rsi|rdi|rsp|rbp|r8|r9|r10|r11|r12|r13|r14|r15|eax|ebx|ecx|edx|esi|edi|esp|ebp)\\b"
         },
         {
-          "name": "variable.language.register.native.arm.neoa",
+          "name": "variable.language.register.native.arm.assembly.neoa",
           "match": "(?i)\\b([xw]([0-9]|[12][0-9]|3[01])|lr|xzr|wzr)\\b"
         },
         {
-          "name": "variable.language.register.native.riscv.neoa",
+          "name": "variable.language.register.native.riscv.assembly.neoa",
           "match": "(?i)\\b(zero|ra|gp|tp|t[0-6]|s[0-9]|s1[01]|a[0-7])\\b"
         }
       ]
@@ -165,19 +165,19 @@
     "numbers": {
       "patterns": [
         {
-          "name": "constant.numeric.hex.neoa",
+          "name": "constant.numeric.hex.assembly.neoa",
           "match": "\\b0[xX][0-9a-fA-F_]+\\b"
         },
         {
-          "name": "constant.numeric.bin.neoa",
+          "name": "constant.numeric.bin.assembly.neoa",
           "match": "\\b0[bB][01_]+\\b"
         },
         {
-          "name": "constant.numeric.oct.neoa",
+          "name": "constant.numeric.oct.assembly.neoa",
           "match": "\\b0[oO][0-7_]+\\b"
         },
         {
-          "name": "constant.numeric.dec.neoa",
+          "name": "constant.numeric.integer.assembly.neoa",
           "match": "\\b[+-]?[0-9][0-9_]*\\b"
         }
       ]
@@ -185,14 +185,14 @@
     "memory_addressing": {
       "patterns": [
         {
-          "name": "meta.memory-operand.neoa",
+          "name": "meta.memory-operand.assembly.neoa",
           "begin": "\\[",
           "beginCaptures": {
-            "0": { "name": "punctuation.definition.bracket.memory.begin.neoa" }
+            "0": { "name": "punctuation.definition.bracket.memory.begin.assembly.neoa" }
           },
           "end": "\\]",
           "endCaptures": {
-            "0": { "name": "punctuation.definition.bracket.memory.end.neoa" }
+            "0": { "name": "punctuation.definition.bracket.memory.end.assembly.neoa" }
           },
           "patterns": [
             { "include": "#registers" },
@@ -206,11 +206,11 @@
     "operators": {
       "patterns": [
         {
-          "name": "keyword.operator.arithmetic.neoa",
+          "name": "keyword.operator.arithmetic.assembly.neoa",
           "match": "[-+*\\/&|^~]"
         },
         {
-          "name": "punctuation.separator.delimiter.neoa",
+          "name": "punctuation.separator.delimiter.assembly.neoa",
           "match": "[,:]"
         }
       ]

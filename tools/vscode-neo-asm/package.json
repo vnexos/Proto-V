@@ -47,6 +47,11 @@
         "language": "neoa",
         "path": "./snippets/neoa.json"
       }
-    ]
+    ],
+    "configurationDefaults": {
+      "[neoa]": {
+        "editor.semanticHighlighting.enabled": true
+      }
+    }
   }
 }
