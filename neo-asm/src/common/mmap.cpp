@@ -128,9 +128,9 @@ bool MemoryMappedFile::open(const std::filesystem::path& path) {
         return false;
     }
 
-    std::string path_str = path.string();
-    HANDLE file = ::CreateFileA(
-        path_str.c_str(),
+    // Use CreateFileW with native wide string on Windows for Unicode path support
+    HANDLE file = ::CreateFileW(
+        path.c_str(),
         GENERIC_READ,
         FILE_SHARE_READ,
         nullptr,

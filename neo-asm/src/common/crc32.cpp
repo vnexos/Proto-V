@@ -41,10 +41,6 @@ inline constexpr auto CRC32_TABLE = generateCRC32Table();
 } // anonymous namespace
 
 uint32_t calcCRC32(std::span<const uint8_t> data) noexcept {
-    if (data.empty()) {
-        return 0x00000000u;
-    }
-
     uint32_t crc = 0xFFFFFFFFu;
     for (uint8_t byte : data) {
         crc = CRC32_TABLE[(crc ^ byte) & 0xFFu] ^ (crc >> 8);

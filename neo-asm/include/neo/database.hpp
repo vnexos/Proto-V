@@ -17,6 +17,27 @@
 namespace neo {
 
 /**
+ * @brief Categorizes database load and validation failure reasons.
+ */
+enum class DatabaseError : uint8_t {
+    None = 0,           ///< No error; operation succeeded
+    FileOpenFailed,     ///< File could not be opened or mapped
+    FileTooSmall,       ///< Buffer/file size is smaller than 64-byte header
+    InvalidMagic,       ///< Header magic bytes mismatch ("NEODB\0\0\0")
+    InvalidVersion,     ///< Header version unsupported (not 0x00010000)
+    CrcMismatch,        ///< Header CRC32 checksum mismatch
+    UnalignedSection,   ///< Section offset is not 8-byte aligned
+    OutOfBoundsSection  ///< Section bounds exceed file bounds or invalid layout
+};
+
+/**
+ * @brief Converts a DatabaseError code to a human-readable diagnostic message.
+ * @param error DatabaseError code to convert.
+ * @return Descriptive string view for diagnostics and error reporting.
+ */
+[[nodiscard]] std::string_view to_string(DatabaseError error) noexcept;
+
+/**
  * @brief Searches for a mnemonic in a frozen hash index bucket array.
  *
  * Implements O(1) query lookups using 32-bit FNV-1a hashing with open addressing
@@ -83,6 +104,18 @@ public:
     [[nodiscard]] bool is_loaded() const noexcept { return header_ != nullptr; }
 
     /**
+     * @brief Returns the error code from the most recent load operation.
+     * @return DatabaseError code.
+     */
+    [[nodiscard]] DatabaseError last_error() const noexcept { return last_error_; }
+
+    /**
+     * @brief Returns a descriptive human-readable message for the last error.
+     * @return Diagnostic error string view.
+     */
+    [[nodiscard]] std::string_view last_error_message() const noexcept { return to_string(last_error_); }
+
+    /**
      * @brief Queries an instruction by mnemonic name in O(1) time.
      * @param name Opcode mnemonic name or origin(...) command.
      * @return Pointer to NeoIndexEntry residing in mapped memory, or nullptr.
@@ -125,6 +158,7 @@ private:
     const char* strtab_{nullptr};
     std::span<const NeoIndexEntry> index_entries_{};
     const uint8_t* template_data_{nullptr};
+    DatabaseError last_error_{DatabaseError::None};
 };
 
 } // namespace neo

@@ -37,8 +37,15 @@ else()
     add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-# Include directories
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+# Core static library for Neo-ASM subsystem
+add_library(neoasm_core STATIC
+    src/common/crc32.cpp
+    src/common/hash.cpp
+    src/common/mmap.cpp
+    src/database/database.cpp
+)
+target_include_directories(neoasm_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_compile_features(neoasm_core PUBLIC cxx_std_20)
 
 # Optional source directory
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt")

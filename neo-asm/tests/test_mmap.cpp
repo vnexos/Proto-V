@@ -66,6 +66,7 @@ void test_valid_load_and_pointer_containment() {
     neo::NeoDatabase db;
     assert(db.load_file(temp_path));
     assert(db.is_loaded() && db.header().format_version == 0x00010000);
+    assert(db.last_error() == neo::DatabaseError::None && db.last_error_message() == "No error");
 
     const auto* entry = db.find_entry("ADD");
     assert(entry != nullptr);
@@ -92,20 +93,24 @@ void test_header_integrity_validation() {
 
     auto* hdr = reinterpret_cast<neo::NeoDbHeader*>(buf.data());
     std::memcpy(hdr->magic, "BADDB\0\0\0", 8);
-    assert(!db.load_buffer(buf));
+    assert(!db.load_buffer(buf) && db.last_error() == neo::DatabaseError::InvalidMagic);
 
     buf = create_mock_neodb();
     hdr = reinterpret_cast<neo::NeoDbHeader*>(buf.data());
     hdr->format_version = 0x00020000;
     hdr->header_crc32 = neo::calcCRC32(std::span<const uint8_t>(buf.data(), 60));
-    assert(!db.load_buffer(buf));
+    assert(!db.load_buffer(buf) && db.last_error() == neo::DatabaseError::InvalidVersion);
 
     buf = create_mock_neodb();
     hdr = reinterpret_cast<neo::NeoDbHeader*>(buf.data());
     hdr->header_crc32 ^= 0xFFFFFFFF;
-    assert(!db.load_buffer(buf));
+    assert(!db.load_buffer(buf) && db.last_error() == neo::DatabaseError::CrcMismatch);
 
     assert(!db.load_buffer(std::span<const uint8_t>(buf.data(), 40)));
+    assert(db.last_error() == neo::DatabaseError::FileTooSmall);
+
+    assert(!db.load_file("non_existent_test_path.neodb"));
+    assert(db.last_error() == neo::DatabaseError::FileOpenFailed);
 }
 
 void test_alignment_and_bounds_validation() {
@@ -117,13 +122,38 @@ void test_alignment_and_bounds_validation() {
         if (i == 1) hdr->index_offset += 2;
         if (i == 2) hdr->template_offset += 3;
         hdr->header_crc32 = neo::calcCRC32(std::span<const uint8_t>(buf.data(), 60));
-        assert(!db.load_buffer(buf));
+        assert(!db.load_buffer(buf) && db.last_error() == neo::DatabaseError::UnalignedSection);
     }
     auto buf = create_mock_neodb();
     auto* hdr = reinterpret_cast<neo::NeoDbHeader*>(buf.data());
     hdr->template_size = 1000000;
     hdr->header_crc32 = neo::calcCRC32(std::span<const uint8_t>(buf.data(), 60));
-    assert(!db.load_buffer(buf));
+    assert(!db.load_buffer(buf) && db.last_error() == neo::DatabaseError::OutOfBoundsSection);
+}
+
+void test_template_overflow_bounds() {
+    const auto buf = create_mock_neodb();
+    neo::NeoDatabase db;
+    assert(db.load_buffer(buf));
+
+    // Integer addition overflow: offset + bytes_needed wraps past UINT64_MAX
+    neo::NeoIndexEntry entry{};
+    entry.template_count = 1;
+    entry.template_offset = UINT64_MAX - 10;
+    assert(db.get_templates(entry).empty());
+
+    // Offset strictly beyond template section size
+    entry.template_offset = db.header().template_size + 1;
+    assert(db.get_templates(entry).empty());
+
+    // Offset at boundary with non-zero template count
+    entry.template_offset = db.header().template_size;
+    assert(db.get_templates(entry).empty());
+
+    // Valid offset but template_count * sizeof exceeds section size
+    entry.template_offset = 0;
+    entry.template_count = 60000;
+    assert(db.get_templates(entry).empty());
 }
 
 void test_linear_probing_and_move() {
@@ -156,6 +186,7 @@ int main() {
     test_header_integrity_validation();
     test_alignment_and_bounds_validation();
     test_linear_probing_and_move();
+    test_template_overflow_bounds();
     std::cout << "[PASS] test_mmap completed successfully.\n";
     return 0;
 }
