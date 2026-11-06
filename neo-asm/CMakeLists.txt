@@ -46,6 +46,8 @@ add_library(neoasm_core STATIC
     src/database/template_builder.cpp
     src/database/yaml_reader.cpp
     src/database/database_writer.cpp
+    src/database/yaml_ops_emitter.cpp
+    src/database/yaml_decompiler.cpp
     src/database/translator.cpp
 )
 target_include_directories(neoasm_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

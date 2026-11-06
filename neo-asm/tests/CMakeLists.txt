@@ -26,3 +26,10 @@ target_link_libraries(test_translator PRIVATE neoasm_core)
 target_compile_definitions(test_translator PRIVATE NEO_TEMPLATES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../ai-driven/templates")
 add_test(NAME test_translator COMMAND test_translator)
 
+# Lossless roundtrip verification test suite (YAML -> neodb -> YAML -> neodb)
+add_executable(test_roundtrip test_roundtrip.cpp)
+target_link_libraries(test_roundtrip PRIVATE neoasm_core)
+target_compile_definitions(test_roundtrip PRIVATE NEO_TEMPLATES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../ai-driven/templates")
+add_test(NAME test_roundtrip COMMAND test_roundtrip)
+
+

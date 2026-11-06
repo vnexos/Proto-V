@@ -44,9 +44,6 @@ StringTableData build_string_table(const ParsedArchitectureSpec& spec) {
         intern_string(op.name);
     }
 
-    intern_string("__neo_meta__");
-    if (!spec.raw_yaml_metadata.empty()) intern_string(spec.raw_yaml_metadata);
-
     return st;
 }
 
@@ -77,11 +74,6 @@ std::vector<NeoIndexEntry> create_index_entries(
         }
     }
 
-    if (!spec.raw_yaml_metadata.empty()) {
-        const uint64_t meta_off = str_offsets.at(spec.raw_yaml_metadata);
-        entries.push_back({str_offsets.at("__neo_meta__"), fnv1a_32("__neo_meta__"),
-                           0x80000000u, 0, 0, meta_off});
-    }
     return entries;
 }
 
@@ -113,7 +105,14 @@ bool populate_frozen_index(std::vector<NeoIndexEntry>& entries,
 
 } // namespace
 
-bool write_neodb_file(const ParsedArchitectureSpec& spec, const std::filesystem::path& output_path) {
+bool write_neodb_file(const ParsedArchitectureSpec& spec_in, const std::filesystem::path& output_path) {
+    ParsedArchitectureSpec spec = spec_in;
+    // Deterministic sorting guarantees identical binary layout across roundtrips
+    std::sort(spec.origin_ops.begin(), spec.origin_ops.end(),
+              [](const auto& a, const auto& b) { return a.name < b.name; });
+    std::sort(spec.neo_ops.begin(), spec.neo_ops.end(),
+              [](const auto& a, const auto& b) { return a.name < b.name; });
+
     const auto tmpl_res = build_instruction_templates(spec);
     const auto st = build_string_table(spec);
     auto entries = create_index_entries(spec, tmpl_res, st.offsets);
