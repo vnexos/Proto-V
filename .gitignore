@@ -30,4 +30,5 @@ Makefile
 
 # Toolchain files
 compile_commands.json
+compile_flags.txt
 .cache/
