@@ -1,0 +1,52 @@
+{
+  "name": "neo-asm-syntax",
+  "displayName": "Neo-ASM Language Support",
+  "description": "Rich syntax highlighting, language configuration, and snippets for Neo-ASM (.neoa) assembly language",
+  "version": "0.1.0",
+  "publisher": "protov",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "keywords": [
+    "neo-asm",
+    "neoa",
+    "assembly",
+    "proto-v",
+    "x86_64",
+    "aarch64",
+    "riscv64"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "neoa",
+        "aliases": [
+          "Neo-ASM",
+          "neoa",
+          "NeoASM"
+        ],
+        "extensions": [
+          ".neoa"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "neoa",
+        "scopeName": "source.neoa",
+        "path": "./syntaxes/neoa.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "neoa",
+        "path": "./snippets/neoa.json"
+      }
+    ]
+  }
+}
