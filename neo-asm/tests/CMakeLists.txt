@@ -20,3 +20,9 @@ add_executable(test_mmap test_mmap.cpp)
 target_link_libraries(test_mmap PRIVATE neoasm_core)
 add_test(NAME test_mmap COMMAND test_mmap)
 
+# YAML to .neodb translator verification test
+add_executable(test_translator test_translator.cpp)
+target_link_libraries(test_translator PRIVATE neoasm_core)
+target_compile_definitions(test_translator PRIVATE NEO_TEMPLATES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../ai-driven/templates")
+add_test(NAME test_translator COMMAND test_translator)
+
