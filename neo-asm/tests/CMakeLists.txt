@@ -79,3 +79,16 @@ add_executable(test_assembler
 target_link_libraries(test_assembler PRIVATE neoasm_core)
 target_compile_definitions(test_assembler PRIVATE NEO_TEMPLATES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../ai-driven/templates")
 add_test(NAME test_assembler COMMAND test_assembler)
+
+# CLI tool driver integration and smoke test suite
+add_executable(test_cli
+    test_cli.cpp
+    test_cli_diagnostics.cpp
+    test_cli_workflows.cpp
+)
+target_link_libraries(test_cli PRIVATE neoasm_core CLI11::CLI11)
+target_compile_definitions(test_cli PRIVATE
+    NEO_ASM_EXE="$<TARGET_FILE:neo-asm>"
+    NEO_TEMPLATES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../ai-driven/templates"
+)
+add_test(NAME test_cli COMMAND test_cli)

@@ -48,6 +48,15 @@ target_include_directories(neoasm_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/includ
 target_link_libraries(neoasm_core PUBLIC yaml-cpp)
 target_compile_features(neoasm_core PUBLIC cxx_std_20)
 
+# neo-asm CLI driver executable
+add_executable(neo-asm
+    src/cli/main.cpp
+    src/cli/cli_commands.cpp
+)
+target_include_directories(neo-asm PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/cli)
+target_link_libraries(neo-asm PRIVATE neoasm_core CLI11::CLI11)
+target_compile_features(neo-asm PRIVATE cxx_std_20)
+
 # Optional source directory
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt")
     add_subdirectory(src)
