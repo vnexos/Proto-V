@@ -49,6 +49,12 @@ add_library(neoasm_core STATIC
     src/database/yaml_ops_emitter.cpp
     src/database/yaml_decompiler.cpp
     src/database/translator.cpp
+    src/compiler/lexer_numeric.cpp
+    src/compiler/lexer_registers.cpp
+    src/compiler/lexer.cpp
+    src/compiler/label_tracker.cpp
+    src/compiler/operand_parser.cpp
+    src/compiler/parser.cpp
 )
 target_include_directories(neoasm_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(neoasm_core PUBLIC yaml-cpp)
