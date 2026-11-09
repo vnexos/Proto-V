@@ -42,5 +42,10 @@ add_executable(test_parser
 target_link_libraries(test_parser PRIVATE neoasm_core)
 add_test(NAME test_parser COMMAND test_parser)
 
+# Register virtualization and x86_64 stack spill test suite
+add_executable(test_expansion test_expansion.cpp)
+target_link_libraries(test_expansion PRIVATE neoasm_core)
+add_test(NAME test_expansion COMMAND test_expansion)
+
 
 
