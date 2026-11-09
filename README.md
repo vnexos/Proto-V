@@ -8,3 +8,4 @@ Proto-V is a high-performance C++20 systems architecture featuring **Neo-ASM**, 
 - **Bidirectional Toolchain**:
   - `neo-asm --translate <arch>.yaml <arch>.neodb`: Convert human-readable YAML specifications to binary opcode databases and vice versa.
   - `neo-asm --compile <input.neoa> <output.bin> --arch=<arch>`: Compile Neo-ASM intermediate source to pure flat machine code binaries.
+  - `neo-asm --install-database|-idb <path>`: Install and copy a `.neodb` database file into the `./database` folder.

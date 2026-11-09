@@ -32,4 +32,20 @@ target_link_libraries(test_roundtrip PRIVATE neoasm_core)
 target_compile_definitions(test_roundtrip PRIVATE NEO_TEMPLATES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../ai-driven/templates")
 add_test(NAME test_roundtrip COMMAND test_roundtrip)
 
+# Assembly Lexer and AST Parser unit test suite
+add_executable(test_parser
+    test_parser.cpp
+    test_parser_instructions.cpp
+    test_parser_labels.cpp
+    test_parser_errors.cpp
+)
+target_link_libraries(test_parser PRIVATE neoasm_core)
+add_test(NAME test_parser COMMAND test_parser)
+
+# Register virtualization and x86_64 stack spill test suite
+add_executable(test_expansion test_expansion.cpp)
+target_link_libraries(test_expansion PRIVATE neoasm_core)
+add_test(NAME test_expansion COMMAND test_expansion)
+
+
 
