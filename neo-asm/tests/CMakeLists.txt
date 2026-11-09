@@ -47,5 +47,35 @@ add_executable(test_expansion test_expansion.cpp)
 target_link_libraries(test_expansion PRIVATE neoasm_core)
 add_test(NAME test_expansion COMMAND test_expansion)
 
+# Position-Independent Code (PIC) branch displacement resolver test suite
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_pic_resolver.cpp")
+    add_executable(test_pic_resolver test_pic_resolver.cpp)
+    target_link_libraries(test_pic_resolver PRIVATE neoasm_core)
+    add_test(NAME test_pic_resolver COMMAND test_pic_resolver)
+endif()
 
+# Neo-ASM Source Preprocessor and Conditional Directives test suite
+add_executable(test_preprocessor
+    test_preprocessor.cpp
+    test_preprocessor_conditionals.cpp
+    test_preprocessor_includes.cpp
+)
+target_link_libraries(test_preprocessor PRIVATE neoasm_core)
+add_test(NAME test_preprocessor COMMAND test_preprocessor)
 
+# Instruction bitfield emitter unit test suite
+add_executable(test_emitter test_emitter.cpp)
+target_link_libraries(test_emitter PRIVATE neoasm_core)
+add_test(NAME test_emitter COMMAND test_emitter)
+
+# Multi-pass assembler integration test suite
+add_executable(test_assembler
+    test_assembler.cpp
+    test_assembler_arithmetic.cpp
+    test_assembler_origin.cpp
+    test_assembler_pipeline.cpp
+    test_assembler_spill_and_pic.cpp
+)
+target_link_libraries(test_assembler PRIVATE neoasm_core)
+target_compile_definitions(test_assembler PRIVATE NEO_TEMPLATES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../ai-driven/templates")
+add_test(NAME test_assembler COMMAND test_assembler)

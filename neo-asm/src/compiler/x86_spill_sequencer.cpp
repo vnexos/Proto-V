@@ -146,6 +146,17 @@ bool has_spilled_operand(const AstInstruction& ast) {
 }
 
 std::vector<ExpandedInstruction> expand_x86_instruction(const AstInstruction& ast) {
+    if (ast.operands.empty()) {
+        return {{ast.mnemonic, {}, false, ast.location}};
+    }
+    if (ast.is_origin) {
+        std::vector<ExpandedOperand> exp_ops;
+        exp_ops.reserve(ast.operands.size());
+        for (const auto& op : ast.operands) {
+            exp_ops.push_back(to_expanded_operand(op));
+        }
+        return {{ast.mnemonic, std::move(exp_ops), false, ast.location}};
+    }
     std::vector<ExpandedInstruction> out;
     if (ast.mnemonic == "ASN") {
         expand_asn(ast, out);
