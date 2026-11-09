@@ -38,27 +38,12 @@ else()
 endif()
 
 # Core static library for Neo-ASM subsystem
-add_library(neoasm_core STATIC
-    src/common/crc32.cpp
-    src/common/hash.cpp
-    src/common/mmap.cpp
-    src/database/database.cpp
-    src/database/template_builder.cpp
-    src/database/yaml_reader.cpp
-    src/database/database_writer.cpp
-    src/database/yaml_ops_emitter.cpp
-    src/database/yaml_decompiler.cpp
-    src/database/translator.cpp
-    src/compiler/lexer_numeric.cpp
-    src/compiler/lexer_registers.cpp
-    src/compiler/lexer.cpp
-    src/compiler/label_tracker.cpp
-    src/compiler/operand_parser.cpp
-    src/compiler/parser.cpp
-    src/compiler/register_mapping.cpp
-    src/compiler/x86_spill_sequencer.cpp
-    src/compiler/register_alloc.cpp
+file(GLOB_RECURSE NEOASM_CORE_SOURCES CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
 )
+list(FILTER NEOASM_CORE_SOURCES EXCLUDE REGEX ".*/cli/.*")
+
+add_library(neoasm_core STATIC ${NEOASM_CORE_SOURCES})
 target_include_directories(neoasm_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(neoasm_core PUBLIC yaml-cpp)
 target_compile_features(neoasm_core PUBLIC cxx_std_20)
